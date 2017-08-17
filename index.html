@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>gift for justjavac's baby</title>
+    <script type="text/javascript">
+        if (window.top !== window.self) { top.location = self.location; }
+    </script>
+    <meta name="description" content="justjavac">
+    <meta name="keywords" content="justjavac">
+    <meta name="author" content="justjavac">
+    <meta name="theme-color" content="#1e2327">
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            font-family: Helvetica Neue, Helvetica, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+            background-image: url('http://wx2.sinaimg.cn/large/5127613dly1fin2sqd6gfj219s0wddhz.jpg');
+            font-size: 85%;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 300%;
+            font-weight: 400;
+        }
+
+        .content {
+            position: absolute;
+            width: 100%;
+            top: 40%;
+            transform: translate(0, -50%);
+            text-align: center;
+        }
+
+        .timer {
+            font-size: 180%;
+            line-height: 1.5;
+            margin: 1em 0;
+        }
+
+        .timer b {
+            color: red;
+        }
+
+        .browsehappy {
+            color: #fff;
+            font-size: 18px;
+            text-align: center;
+            position: relative;
+            top: 49%
+        }
+    </style>
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+    <p class="browsehappy">
+      你正在使用一个<strong>过时</strong>的浏览器。请<a class="link" href="http://browsehappy.com" target="_blank">升级你的浏览器</a>以查看网页。</p>
+    </p>
+    <![endif]-->
+
+    <div class="content">
+        <h1>距离高考还有</h1>
+        <div class="timer">
+            <b id="d"></b> 天 <b id="h"></b> 时 <b id="m"></b> 分 <b id="s"></b> 秒
+        </div>
+    </div>
+
+    <script>
+        function timer() {
+            var now = new Date();
+            var endTime = new Date(now.getFullYear() + 18, 5, 7, 9);
+            var t = endTime - now;
+
+            document.getElementById('d').innerHTML = ~~(t / 1000 / 60 / 60 / 24);
+            document.getElementById('h').innerHTML = ~~(t / 1000 / 60 / 60 % 24);
+            document.getElementById('m').innerHTML = ~~(t / 1000 / 60 % 60);
+            document.getElementById('s').innerHTML = ~~(t / 1000 % 60);
+
+            setTimeout(timer, 1000);
+        }
+
+        timer();
+    </script>
+</body>
+
+</html>
