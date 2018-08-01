@@ -54,6 +54,10 @@
             position: relative;
             top: 49%
         }
+        .v-fork-me {position:fixed;right:0;top:0;z-index:999;}
+        @media (max-width: 979px) {
+            .v-fork-me {display: none;}
+        }
     </style>
 </head>
 
@@ -71,6 +75,10 @@
             <b id="d"></b> 天 <b id="h"></b> 时 <b id="m"></b> 分 <b id="s"></b> 秒
         </div>
     </div>
+    
+    <a class="v-fork-me" href="https://github.com/justjavac/baby-time" target="_blank" rel="noopener">
+      <img src="http://justjavac.com/assets/themes/twitter/bootstrap/img/forkme_right_darkblue.png" alt="Fork me on GitHub">
+    </a>
 
     <script>
         function timer() {
