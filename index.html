@@ -63,11 +63,9 @@
 
 <body>
     <div class="content">
-        <h1>justjavac's baby</h1>
+        <h1>justjavac's babies</h1>
         <h1>距离高考还有</h1>
-        <div class="timer">
-            <b id="d"></b> 天 <b id="h"></b> 时 <b id="m"></b> 分 <b id="s"></b> 秒
-        </div>
+        <div id="timers"></div>
     </div>
 
     <a class="v-fork-me" href="https://github.com/justjavac/baby-time" target="_blank" rel="noopener">
@@ -75,19 +73,61 @@
     </a>
 
     <script>
+        var children = [
+            {
+                endTime: new Date('2035-06-07T09:00:00+08:00')
+            },
+            {
+                endTime: new Date('2039-06-07T09:00:00+08:00')
+            }
+        ];
+
+        function renderTimers() {
+            var timers = document.getElementById('timers');
+
+            for (var i = 0; i < children.length; i++) {
+                var child = children[i];
+                var id = 'child-' + i;
+                var timerElement = document.createElement('div');
+
+                child.id = id;
+
+                timerElement.className = 'timer';
+                timerElement.innerHTML = '<b id="' + id + '-d"></b> 天 <b id="' + id + '-h"></b> 时 <b id="' + id + '-m"></b> 分 <b id="' + id + '-s"></b> 秒';
+                timers.appendChild(timerElement);
+            }
+        }
+
+        function getTimeLeft(endTime, now) {
+            var t = Math.max(0, endTime - now);
+
+            return {
+                days: Math.floor(t / 1000 / 60 / 60 / 24),
+                hours: Math.floor(t / 1000 / 60 / 60) % 24,
+                minutes: Math.floor(t / 1000 / 60) % 60,
+                seconds: Math.floor(t / 1000) % 60
+            };
+        }
+
+        function updateTimer(child, now) {
+            var timeLeft = getTimeLeft(child.endTime, now);
+
+            document.getElementById(child.id + '-d').innerHTML = timeLeft.days;
+            document.getElementById(child.id + '-h').innerHTML = timeLeft.hours;
+            document.getElementById(child.id + '-m').innerHTML = timeLeft.minutes;
+            document.getElementById(child.id + '-s').innerHTML = timeLeft.seconds;
+        }
+
         function timer() {
             var now = new Date();
-            var endTime = new Date('2035-05-07T09:00:00+08:00');
-            var t = endTime - now;
-
-            document.getElementById('d').innerHTML = ~~(t / 1000 / 60 / 60 / 24);
-            document.getElementById('h').innerHTML = ~~(t / 1000 / 60 / 60 % 24);
-            document.getElementById('m').innerHTML = ~~(t / 1000 / 60 % 60);
-            document.getElementById('s').innerHTML = ~~(t / 1000 % 60);
+            for (var i = 0; i < children.length; i++) {
+                updateTimer(children[i], now);
+            }
 
             setTimeout(timer, 1000);
         }
 
+        renderTimers();
         timer();
     </script>
 </body>
