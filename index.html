@@ -3,9 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="renderer" content="webkit">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>gift for justjavac's babies</title>
     <script type="text/javascript">
         if (window.top !== window.self) { top.location = self.location; }
@@ -18,7 +16,8 @@
         body {
             -webkit-font-smoothing: antialiased;
             font-family: Helvetica Neue, Helvetica, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
-            background-image: url('https://wx2.sinaimg.cn/large/5127613dly1fin2sqd6gfj219s0wddhz.jpg');
+            background-color: #f2f2f2;
+            background-image: url('bg.jpg');
             font-size: 85%;
             margin: 0;
         }
@@ -46,13 +45,6 @@
             color: red;
         }
 
-        .browsehappy {
-            color: #fff;
-            font-size: 18px;
-            text-align: center;
-            position: relative;
-            top: 49%
-        }
         .v-fork-me {position:fixed;right:0;top:0;z-index:999;}
         @media (max-width: 979px) {
             .v-fork-me {display: none;}
@@ -89,11 +81,16 @@
                 var id = 'child-' + i;
                 var timerElement = document.createElement('div');
 
-                child.id = id;
-
                 timerElement.className = 'timer';
                 timerElement.innerHTML = '<b id="' + id + '-d"></b> 天 <b id="' + id + '-h"></b> 时 <b id="' + id + '-m"></b> 分 <b id="' + id + '-s"></b> 秒';
                 timers.appendChild(timerElement);
+
+                child.els = {
+                    d: document.getElementById(id + '-d'),
+                    h: document.getElementById(id + '-h'),
+                    m: document.getElementById(id + '-m'),
+                    s: document.getElementById(id + '-s')
+                };
             }
         }
 
@@ -108,23 +105,42 @@
             };
         }
 
+        function setText(el, value) {
+            var text = String(value);
+            if (el.textContent !== text) {
+                el.textContent = text;
+            }
+        }
+
         function updateTimer(child, now) {
             var timeLeft = getTimeLeft(child.endTime, now);
 
-            document.getElementById(child.id + '-d').innerHTML = timeLeft.days;
-            document.getElementById(child.id + '-h').innerHTML = timeLeft.hours;
-            document.getElementById(child.id + '-m').innerHTML = timeLeft.minutes;
-            document.getElementById(child.id + '-s').innerHTML = timeLeft.seconds;
+            setText(child.els.d, timeLeft.days);
+            setText(child.els.h, timeLeft.hours);
+            setText(child.els.m, timeLeft.minutes);
+            setText(child.els.s, timeLeft.seconds);
         }
 
-        function timer() {
+        function updateAll() {
             var now = new Date();
             for (var i = 0; i < children.length; i++) {
                 updateTimer(children[i], now);
             }
-
-            setTimeout(timer, 1000);
         }
+
+        function timer() {
+            updateAll();
+
+            // 对齐到下一秒边界，避免 setTimeout 误差累积导致跳秒
+            setTimeout(timer, 1000 - (Date.now() % 1000));
+        }
+
+        // 后台标签页 setTimeout 会被节流，回到前台时立即刷新一次
+        document.addEventListener('visibilitychange', function () {
+            if (!document.hidden) {
+                updateAll();
+            }
+        });
 
         renderTimers();
         timer();
